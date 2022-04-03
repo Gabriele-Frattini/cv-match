@@ -127,7 +127,4 @@ class MatchCV(object):
 
 # Parsed 5286 elements in 9.39s with synchronous function
 # Parsed 5286 elements in 7.02s with asynchronous function
-with open("C:/Users/gabbe/Downloads/cv-match/media/image.jfif", 'rb') as file:
-        match = MatchCV(cv=file, subject="not a real job123")
 
-        print(match.ReadCV())
