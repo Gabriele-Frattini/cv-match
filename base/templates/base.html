@@ -1,0 +1,99 @@
+<!-- {% load static %} -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+  
+  <title></title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    body{
+      background-color: #EDEDE9;
+      font-family: 'Nunito', sans-serif;
+      padding-top: 50 px;
+      }
+
+      .container{
+        max-width: 750px;
+        height: 530px;
+        margin: auto;
+        margin-top: 200px;
+        background-color: #fff;
+        -webkit-box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
+            box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
+      }
+
+      .header-bar {
+        display: flex;
+        justify-content: space-between;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px 5px 0 0;
+        background: linear-gradient(90deg, #e6d6b7, #ccbaa8, #e2d1be, #e7cfbd, #cead9b);
+        }
+
+      .info-class {
+        color: #fff;
+      }
+
+
+      input, label {
+    display:block;
+    }
+
+    .form-wrapper{
+      display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            border-top: 1px solid #dfe4ea;
+            overflow: hidden;
+            margin-left: 25%;
+    }
+
+    .info-wrapper{
+      display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            border-top: 1px solid #dfe4ea;
+            overflow: hidden;
+    }
+
+
+    .form-control{
+      margin-right: 50px;
+      margin-top: 2px;
+
+    }
+
+    .button{
+      background-color: #cead9b;
+      border: none;
+      color: white;
+      padding: 7px 15px;
+
+      display: inline-block;
+      font-size: 16px;     
+    }
+
+
+  </style>
+
+</head>
+<body>
+
+  <div class="container">
+    {% block content %}
+
+    {% endblock %}
+  </div>
+
+</body>
+</html>

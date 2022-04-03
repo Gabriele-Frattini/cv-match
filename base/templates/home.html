@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content  %}
+  <div class="header-bar">
+    <div>
+    <h2>Hur väl matchar ditt CV mot ditt drömjob?</h2>
+    <p>(området och CV måste vara på engelska)</p>
+    </div>
+
+    <h4><a href="{% url 'info' %}" class="info-class">Hur det funkar</a></h4>
+  </div>
+
+
+<div class="form-wrapper">
+  <form method="POST" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+
+    <h4><label for="subject">Vilket område är du intresserad av?</label></h4>
+    {{ upload_form.subject }}
+
+    <h4><label for="file_name">Ladda upp ditt CV (PDF)</label></h4>
+    {{upload_form.file_name}}
+
+  
+    <p></p>
+    <input type="submit" value="Bekräfta" class="button">
+    <p></p>
+    {% if result %}
+    <h3 class="result-class">{{result}}</h3>
+    {% elif invalid_file %}
+    <h3 class="result-class">{{invalid_file}}</h3>
+    {% elif invalid_subject %}
+    <h3 class="result-class">{{invalid_subject}}</h3>
+    {% endif %}
+  </form>
+
+  </div>
+</div>
+
+
+
+
+{% endblock %}

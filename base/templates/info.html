@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="header-bar">
+  <h2>Hur det funkar</h2>
+  <h4><a href="{% url 'home' %}" class="info-class">Hem</a></h4>
+
+
+</div>
+
+<div class="info-wrapper">
+  <ul>
+    <h4>
+      <li>Ingen data sparas.</li></h4>
+  <li>
+    <h4>
+    Det området som du vill jämföra ditt CV mot används som sökord på Indeed och från varje jobbbeskrivning hämtas specifika paragraper som börjar med vissa nyckelord (kvalifikationer, din backgrund, profil osv)</li></h4>
+  
+  <li>
+    <h4>
+    Direkt efter går all jobbinformation och ditt CV igenom en tokinseringsprocess som tar bort alla stoppord (och, att, som), symboler (@ , ..) och lemmatiserar alla ord till sin morfologiska rot. Tillskillnad från en stam, som är ett ord utan prefix, så är roten den minsta betydelsebärande enheten av ordet, och föredras generellt i NLP sammanhang.
+  </h4>
+  </li>
+  <li>
+    <h4>
+     Till sist används cosinus likheten för att räkna ut likheten mellan innehållet i ditt CV och jobbannonserna som finns på indeed.
+  </li>
+
+  <li>
+    <h4>
+     Hela processen tar drygt 30 sekunder,
+  </li>
+
+  <h2>Hur mäts "likheten"?</h2>
+  
+  
+  <li><h4>om vi representerar ditt cv som en vektor och jobbbeskrivningarna från indeed som en annan vektor</li></h4>
+ 
+  <h4>\[CV = \begin{bmatrix} \text{erfaren i windows} \\ \text{Lvl90 Shaman healer}\end{bmatrix}.\]</h4>
+
+  <h4>\[Indeed = \begin{bmatrix}\text{Junior med 10+ års erfarenhet} \\ \text{Uppfinnare av Windows}\end{bmatrix}.\]</h4>
+
+
+  <h4><li>
+    och gör om dom till term-frekvens vektorer som håller frekvensen  varje gång ett visst ord upkommer i vardera text (roten av orden)</li></h4>
+
+
+  <table>
+    <tr>
+      <th>Dokument</th>
+      <th>erfaren</th>
+      <th>lvl90</th>
+      <th>shaman</th>
+      <th>healer</th>
+      <th>junior</th>
+      <th>10</th>
+      <th>uppfinna</th>
+      <th>windows</th>
+    </tr>
+    <tr>
+      <td>CV</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+
+    </tr>
+    <tr>
+      <td>Indeed</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </table>
+
+  <style>
+    table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;    
+    padding: 5px;
+}
+  </style>
+
+
+
+    <h4><li>så kan vi sedan använda oss av Cosinus likheten: </li></h4>
+    <h4>\[cos(\overrightarrow{A},\overrightarrow{B}) = {A*B \over ||A||*||B||}.\]</h4>
+    
+  <h4><li> Som är kvoten av kryssprodukten mellan vektorerna och produkten av deras magnitud . Vinkeln som mäts mellan dom säger ifall vektorerna går i samma riktning eller inte och går från -1, som betyder att dokumenten är helt skilda från varandra, till 1 som ger en perfekt matchning</li></h4>
+
+</ul>
+
+</div>
+{% endblock %}
