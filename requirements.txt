@@ -1,7 +1,6 @@
 bs4
 Django
-django-cors-headers
-djangorestframework
+django_heroku
 nltk
 PyPDF2
 requests
@@ -14,5 +13,4 @@ mongoengine
 dnspython
 djongo
 pre-commit
-python-decouple
-dotenv
+python-dotenv
