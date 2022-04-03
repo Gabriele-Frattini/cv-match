@@ -57,37 +57,36 @@ class MatchCV(object):
 
         return text
 
-    async def IndeedScrape(self, pages=1):
+    async def IndeedScrape(self):
 
         subject = self.subject
         subject = subject.replace(" ", "+")
 
-        for i in range(0, pages*10, 10):
-            url = "https://se.indeed.com/jobb?q="+subject + \
-                "&l=sverige"+"&lang=en&start="+str(i)
-            htmldata = requests.get(url).text
-            soup = BeautifulSoup(htmldata, 'html.parser')
-            jobs_body = soup.find('div', {'class': 'mosaic-provider-jobcards'})
-            all_requirements = ""
+        url = "https://se.indeed.com/jobb?q="+subject + \
+            "&l=sverige"+"&lang=en&start=10"
+        htmldata = requests.get(url).text
+        soup = BeautifulSoup(htmldata, 'html.parser')
+        jobs_body = soup.find('div', {'class': 'mosaic-provider-jobcards'})
+        all_requirements = ""
 
-            async with aiohttp.ClientSession() as session:
-                for a in jobs_body.select('a', href=True):
-                    while len(all_requirements) < 4000:
-                        if a["href"].startswith("/rc/clk?"):
-                            link = "https://indeed.com"+a["href"]
-                            async with session.get(link) as resp:
-                                html_body = await resp.read()
-                                job_soup = BeautifulSoup(
-                                    html_body, "html.parser")
-                                job_description = job_soup.find(
-                                    'div', {'id': 'jobDescriptionText'})
-                                if job_description:
-                                    paragraphs = job_description.text.split(
-                                        "\n")
+        async with aiohttp.ClientSession() as session:
+            for a in jobs_body.select('a', href=True):
+                while len(all_requirements) < 3000:
+                    if a["href"].startswith("/rc/clk?"):
+                        link = "https://indeed.com"+a["href"]
+                        async with session.get(link) as resp:
+                            html_body = await resp.read()
+                            job_soup = BeautifulSoup(
+                                html_body, "html.parser")
+                            job_description = job_soup.find(
+                                'div', {'id': 'jobDescriptionText'})
+                            if job_description:
+                                paragraphs = job_description.text.split(
+                                    "\n")
 
-                                    for sentence in str(paragraphs).split("."):
-                                        if sentence != "" or "requirements" in sentence or "qualifications" in sentence or "skills" in sentence or "background" in sentence:
-                                            all_requirements += sentence+" "
+                                for sentence in str(paragraphs).split("."):
+                                    if sentence != "" or "requirements" in sentence or "qualifications" in sentence or "skills" in sentence or "background" in sentence:
+                                        all_requirements += sentence+" "
 
         preprocessed_subject = self.preprocess(all_requirements)
         self.new_subject_corpus = preprocessed_subject
