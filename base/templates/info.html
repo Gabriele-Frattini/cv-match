@@ -16,7 +16,7 @@
   <li>
     <h4>
     Det området som du vill jämföra ditt CV mot används som sökord på Indeed och från varje jobbbeskrivning hämtas specifika paragraper som börjar med vissa nyckelord (kvalifikationer, din backgrund, profil osv)</li></h4>
-  
+
   <li>
     <h4>
     Direkt efter går all jobbinformation och ditt CV igenom en tokinseringsprocess som tar bort alla stoppord (och, att, som), symboler (@ , ..) och lemmatiserar alla ord till sin morfologiska rot. Tillskillnad från en stam, som är ett ord utan prefix, så är roten den minsta betydelsebärande enheten av ordet, och föredras generellt i NLP sammanhang.
@@ -33,10 +33,10 @@
   </li>
 
   <h2>Hur mäts "likheten"?</h2>
-  
-  
+
+
   <li><h4>om vi representerar ditt cv som en vektor och jobbbeskrivningarna från indeed som en annan vektor</li></h4>
- 
+
   <h4>\[CV = \begin{bmatrix} \text{erfaren i windows} \\ \text{Lvl90 Shaman healer}\end{bmatrix}.\]</h4>
 
   <h4>\[Indeed = \begin{bmatrix}\text{Junior med 10+ års erfarenhet} \\ \text{Uppfinnare av Windows}\end{bmatrix}.\]</h4>
@@ -88,7 +88,7 @@
     border: 1px solid black;
     border-collapse: collapse;
     margin-left: auto;
-    margin-right: auto;    
+    margin-right: auto;
     padding: 5px;
 }
   </style>
@@ -97,7 +97,7 @@
 
     <h4><li>så kan vi sedan använda oss av Cosinus likheten: </li></h4>
     <h4>\[cos(\overrightarrow{A},\overrightarrow{B}) = {A*B \over ||A||*||B||}.\]</h4>
-    
+
   <h4><li> Som är kvoten av kryssprodukten mellan vektorerna och produkten av deras magnitud . Vinkeln som mäts mellan dom säger ifall vektorerna går i samma riktning eller inte och går från -1, som betyder att dokumenten är helt skilda från varandra, till 1 som ger en perfekt matchning</li></h4>
 
 </ul>

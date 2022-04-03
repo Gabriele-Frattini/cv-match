@@ -1,5 +1,5 @@
 bs4
-Django 
+Django
 django-cors-headers
 djangorestframework
 nltk

@@ -59,7 +59,7 @@ def formView(request):
                         db["cv_collection"].insert_one(result_db)
                         result = f"Likheten var {score}%"
 
-   
+
             else:
                 context= {'invalid_file': (f"{file.name} är inte giltig.")}
                 return render(request, "home.html",context)
