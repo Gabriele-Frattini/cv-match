@@ -1,0 +1,41 @@
+def IndeedScrape(self, pages=1):
+
+    subject = self.subject
+
+    subject = subject.replace(" ", "+")
+    all_requirements = " "
+    for i in range(0, pages*10, 10):
+        url = "https://se.indeed.com/jobb?q="+subject + \
+            "&l=sverige"+"&lang=en&start="+str(i)
+        htmldata = requests.get(url).text
+        soup = BeautifulSoup(htmldata, 'html.parser')
+
+        jobs_body = soup.find('div', {'class': 'mosaic-provider-jobcards'})
+
+        for a in jobs_body.select('a', href=True):
+            while len(all_requirements) <6000:
+                if a is None:
+                    raise AttributeError
+                link = a["href"]
+
+                if link.startswith("/rc/clk?"):
+                    url = "https://indeed.com"+link
+
+                    job_response = requests.get(url)
+                    job_data = job_response.text
+                    job_soup = BeautifulSoup(job_data, "html.parser")
+
+                    job_description = job_soup.find(
+                        'div', {'id': 'jobDescriptionText'})
+                    job_description = job_description.text if job_description else "N/A"
+                    paragraphs = job_description.split("\n")
+
+                    for sentence in str(paragraphs).split("."):
+                        if sentence != "" or "requirements" in sentence or "qualifications" in sentence or "skills" in sentence or "background" in sentence:
+                            all_requirements += sentence+" "
+
+        preprocessed_subject = self.preprocess(all_requirements)
+        self.new_subject_corpus = preprocessed_subject
+
+        return preprocessed_subject
+

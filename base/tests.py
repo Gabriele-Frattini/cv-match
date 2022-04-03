@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 from .utils import MatchCV
 from admin.settings import MEDIA_ROOT
 import os
+import asyncio
 
 pdf_file = os.path.join(MEDIA_ROOT,"resume.pdf")
 image_file = os.path.join(MEDIA_ROOT, "image.jfif")
@@ -17,21 +18,22 @@ class TestClass(SimpleTestCase):
         self.assertEqual(home_response.status_code,
                          200) and self.assertEqual(info_response, 200)
 
-    def test_score(self):
-
-      #invalid cv
-      match = MatchCV(cv_path=image_file, subject="machine learning")
-      with self.assertRaises(ValueError):
-        match.ReadCV()
+    def test_subject(self):
 
       #invalid subject
-      match = MatchCV(cv_path=pdf_file, subject="not a real job123")
+      match = MatchCV(cv=None, subject="not a real job123")
       with self.assertRaises(AttributeError):
-        match.IndeedScrape()
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(match.IndeedScrape())
 
-      #valid form
-      match = MatchCV(cv_path=pdf_file, subject="fullstack")
-      score = match.calculate_cosine_similarity()
-      self.assertIsNot(score, None)
+      #invalid resume
+      with open("C:/Users/gabbe/Downloads/cv-match/media/image.jfif", 'rb') as file:
+        match = MatchCV(cv=file, subject=None)
+        self.assertIsNone(match.ReadCV())
+
+      # valid resume and subject
+      with open("C:/Users/gabbe/Downloads/cv-match/media/Resume.pdf", 'rb') as file:
+        match = MatchCV(cv=file, subject="machine learning")
+        self.assertIsNotNone(match.calculate_cosine_similarity)        
 
 

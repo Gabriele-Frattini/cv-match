@@ -1,10 +1,7 @@
 from django.shortcuts import redirect, render
 from .forms import uploadFileForm
-from .utils import MatchCV, delete_file
-import shutil
-from django.http import HttpResponse
+from .utils import MatchCV
 from pymongo import MongoClient
-
 from admin.settings import MONGODB_URL
 
 # connect to db
@@ -24,13 +21,10 @@ def formView(request):
     if request.method == "POST":
         upload_form = uploadFileForm(request.POST, request.FILES)
         if upload_form.is_valid():
-
             file = request.FILES["file_name"]
             if file.name.endswith("pdf"):
-                file_path = "media/files/"+str(file)
                 subject = upload_form.cleaned_data["subject"]
-                match = MatchCV(cv_path=file_path, subject=subject)
-                delete_file(file_path)
+                match = MatchCV(cv=file, subject=subject)
                 qurey_dict = db["cv_collection"].find_one({'subject': subject})
 
                 if qurey_dict is not None:
@@ -44,13 +38,8 @@ def formView(request):
                     result = f"Likheten var {score}%"
 
                 elif qurey_dict is None:
-                    try:
-                        score = match.calculate_cosine_similarity()
-                    except AttributeError:
-                        context = {'invalid_subject': (
-                            f"{subject} har inga jobbinlägg")}
-                        return render(request, "home.html", context)
 
+                    score = match.calculate_cosine_similarity()
                     result_db = {
                         'subject': subject,
                         'result': [score, ],
