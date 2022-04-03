@@ -28,10 +28,11 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('secret_key')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+#dev
 
 ALLOWED_HOSTS = ["cv-match.herokuapp.com", "127.0.0.1"]
 
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'admin.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-MONGODB_URL = os.getenv('mongodb_url')
+MONGODB_URL = os.getenv('MONGODB_URI')
 
 DATABASES = {
     'default': {
