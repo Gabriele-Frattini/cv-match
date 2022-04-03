@@ -30,8 +30,8 @@ class TestClass(SimpleTestCase):
         match.IndeedScrape()
 
       #valid form
-      match = MatchCV(cv_path=pdf_file, subject="machine learning")
-      score = match.calculate_cosine_similarity(subject_corpus=None)
+      match = MatchCV(cv_path=pdf_file, subject="fullstack")
+      score = match.calculate_cosine_similarity()
       self.assertIsNot(score, None)
 
 

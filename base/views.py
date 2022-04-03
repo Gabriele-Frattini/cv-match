@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from .forms import uploadFileForm
-from .utils import MatchCV
+from .utils import MatchCV, delete_file
 import shutil
 from django.http import HttpResponse
 from pymongo import MongoClient
@@ -33,6 +33,7 @@ def formView(request):
                     file_path = "media/files/"+str(file)
                     subject = upload_form.cleaned_data["subject"]
                     match = MatchCV(cv_path=file_path, subject=subject)
+                    delete_file(file_path)
                     qurey_dict = db["cv_collection"].find_one({'subject':subject})
 
                     if qurey_dict is not None:
