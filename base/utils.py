@@ -72,7 +72,7 @@ class MatchCV(object):
 
             async with aiohttp.ClientSession() as session:
                 for a in jobs_body.select('a', href=True):
-                    while len(all_requirements) < 6000:
+                    while len(all_requirements) < 4000:
                         if a["href"].startswith("/rc/clk?"):
                             link = "https://indeed.com"+a["href"]
                             async with session.get(link) as resp:
@@ -107,7 +107,7 @@ class MatchCV(object):
 
         tfidf_vectorizer = TfidfVectorizer()
 
-        subject = subject[:len(subject)]
+        subject = subject[:len(cv)]
         corpus = [subject, cv]
 
         sparse_mtx = tfidf_vectorizer.fit_transform(corpus)
