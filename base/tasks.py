@@ -21,7 +21,7 @@ def async_scrape(subject):
   }
   db["something"].insert_one(data)
 
-  return "Done"
+  return data
 
 
 
