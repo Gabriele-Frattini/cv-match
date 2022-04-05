@@ -1,8 +1,14 @@
 from django.shortcuts import redirect, render
 from .forms import uploadFileForm
-from .utils import MatchCV
 from pymongo import MongoClient
 from admin.settings import MONGODB_URL
+from .tasks import async_scrape
+from .utils import MatchCV
+import io
+import pickle
+import time
+from celery.result import AsyncResult
+from django.urls import reverse
 
 # connect to db
 client = MongoClient(MONGODB_URL)
@@ -16,7 +22,7 @@ def infoView(request):
 
 
 def formView(request):
-
+    subject_scrape = ""
     result = ""
     if request.method == "POST":
         upload_form = uploadFileForm(request.POST, request.FILES)
@@ -25,29 +31,47 @@ def formView(request):
             if file.name.endswith("pdf"):
                 subject = upload_form.cleaned_data["subject"]
                 match = MatchCV(cv=file, subject=subject)
-                qurey_dict = db["cv_collection"].find_one({'subject': subject})
+                qurey_dict = db["something"].find_one({'subject': subject})
 
                 if qurey_dict is not None:
-                    subject_corpus = qurey_dict["subject_corpus"]
+                    subject_corpus = qurey_dict["corpus"]
 
                     score = match.calculate_cosine_similarity(
-                        _new_subject_corpus=subject_corpus)
+                        _subject_corpus=subject_corpus)
+
                     db["cv_collection"].update_one({'subject': subject},
                                                    {"$push": {"result": score}
                                                     })
                     result = f"Likheten var {score}%"
 
                 elif qurey_dict is None:
+                    async_scrape.delay(subject=subject)
+                    reverse('info')
+                    # a = async_scrape.AsyncResult(v)
+                    # print(a.get())
+                    # async_scrape.apply_sync((subject), link=db["something"].find_one({'subject': subject}))
+                    # print(db["something"].find_one({'subject': subject}))
+                    # print(res)
+                    # print(res.get())
+                    # qurey_dict = db["something"].find_one({'subject': subject})
+                    # print(qurey_dict)
 
-                    score = match.calculate_cosine_similarity()
-                    result_db = {
-                        'subject': subject,
-                        'result': [score, ],
-                        'subject_corpus': match.new_subject_corpus
-                    }
-                    db["cv_collection"].insert_one(result_db)
-                    result = f"Likheten var {score}%"
 
+                    # if qurey_dict is None:
+                    #     context = {'invalid_file': (f"{file.name} är inte giltig.")}
+                    #     return render(request, "home.html", context)
+
+                    # else:
+                    #     subject_corpus = qurey_dict["corpus"]
+
+                    #     score = match.calculate_cosine_similarity(
+                    #         _subject_corpus=subject_corpus)
+                    #     db["cv_collection"].update_one({'subject': subject},
+                    #                                 {"$push": {"result": score}
+                    #                                     })
+
+                    #     result = f"Likheten var {score}%"
+                    
             else:
                 context = {'invalid_file': (f"{file.name} är inte giltig.")}
                 return render(request, "home.html", context)
@@ -56,5 +80,5 @@ def formView(request):
         upload_form = uploadFileForm()
 
     context = {"upload_form": upload_form,
-               "result": result}
+               "result": result, 'subject_scrape': subject_scrape}
     return render(request, "home.html", context)

@@ -1,19 +1,33 @@
-def IndeedScrape(self, pages=1):
+import PyPDF2
+import requests
+from bs4 import BeautifulSoup
+from nltk.stem.porter import *
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from nltk.corpus import wordnet
+from nltk.stem import WordNetLemmatizer
+import io
+import os
+import time
 
-    subject = self.subject
+def IndeedScrape(subject):
 
     subject = subject.replace(" ", "+")
     all_requirements = " "
-    for i in range(0, pages*10, 10):
-        url = "https://se.indeed.com/jobb?q="+subject + \
-            "&l=sverige"+"&lang=en&start="+str(i)
-        htmldata = requests.get(url).text
-        soup = BeautifulSoup(htmldata, 'html.parser')
+    url = "https://se.indeed.com/jobb?q="+subject + \
+        "&l=sverige"+"&lang=en&start=10"
+    htmldata = requests.get(url).text
+    soup = BeautifulSoup(htmldata, 'html.parser')
 
-        jobs_body = soup.find('div', {'class': 'mosaic-provider-jobcards'})
+    jobs_body = soup.find('div', {'class': 'mosaic-provider-jobcards'})
+    if jobs_body is None:
+        return None
 
+    else:
         for a in jobs_body.select('a', href=True):
-            while len(all_requirements) <6000:
+            while len(all_requirements) < 4000:
                 if a is None:
                     raise AttributeError
                 link = a["href"]
@@ -34,8 +48,4 @@ def IndeedScrape(self, pages=1):
                         if sentence != "" or "requirements" in sentence or "qualifications" in sentence or "skills" in sentence or "background" in sentence:
                             all_requirements += sentence+" "
 
-        preprocessed_subject = self.preprocess(all_requirements)
-        self.new_subject_corpus = preprocessed_subject
-
-        return preprocessed_subject
-
+        return all_requirements

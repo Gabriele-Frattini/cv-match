@@ -16,3 +16,8 @@ pre-commit
 python-dotenv
 asyncio
 aiohttp
+celery
+django-celery-beat-2.2.1
+redis
+celerybeat-mongo
+django_celery_results

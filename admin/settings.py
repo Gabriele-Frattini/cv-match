@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 #dev
 
-ALLOWED_HOSTS = ["cv-match.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["cv-match.herokuapp.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
+    'django_celery_beat',
 
 ]
 
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'admin.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,10 +88,40 @@ WSGI_APPLICATION = 'admin.wsgi.application'
 
 MONGODB_URL = os.getenv('MONGODB_URI')
 
+#celery
+CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_BROKER_URL = 'mongodb'
+
+# CELERY_RESULT_BACKEND = "mongodb"
+
+
+# CELERY_MONGODB_BACKEND_SETTINGS = {
+#     "host": "mongodb://mongodev:27017",
+#     "database": "cv",
+#     "taskmeta_collection": "something",
+# }
+
+
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+
+# CELERY_RESULT_BACKEND = 'mongodb://127.0.0.1:30000/'
+# CELERY_MONGODB_BACKEND_SETTINGS = {
+# 	'database': 'MySampleDB',
+# 	'taskmeta_collection': 'my_taskmeta_collection',}
+# CELERY_MONGODB_BACKEND_SETTINGS = {
+#     "host":"127.0.0.1",
+#     "port": 27017,
+#     "database": "cv",
+#     "taskmeta_collection": "cv_collection",
+# }
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'cv',
+        'NAME': 'Cluster0',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
                 'host': MONGODB_URL
@@ -136,8 +167,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
