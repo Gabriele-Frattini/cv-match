@@ -28,6 +28,8 @@ def IndeedScrape(subject):
     else:
         for a in jobs_body.select('a', href=True):
             while len(all_requirements) < 4000:
+                if a is None:
+                    raise AttributeError
                 link = a["href"]
 
                 if link.startswith("/rc/clk?"):
