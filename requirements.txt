@@ -20,3 +20,6 @@ celery
 redis
 celerybeat-mongo
 django_celery_results
+channels==3.0.3
+channels-redis==3.3.0
+daphne==3.0.2
