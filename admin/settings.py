@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 #dev
 
-ALLOWED_HOSTS = ["cv-match.herokuapp.com", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["cv-match.herokuapp.com", "127.0.0.1", "localhost","match-cv.herokuapp.com"]
 
 
 # Application definition
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
-    'django_celery_beat',
+    'django_celery_results',
 
 ]
 
@@ -89,33 +89,9 @@ WSGI_APPLICATION = 'admin.wsgi.application'
 MONGODB_URL = os.getenv('MONGODB_URI')
 
 #celery
-CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = os.environ['REDIS_URL']
 # CELERY_BROKER_URL = 'mongodb'
-
 # CELERY_RESULT_BACKEND = "mongodb"
-
-
-# CELERY_MONGODB_BACKEND_SETTINGS = {
-#     "host": "mongodb://mongodev:27017",
-#     "database": "cv",
-#     "taskmeta_collection": "something",
-# }
-
-
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-
-# CELERY_RESULT_BACKEND = 'mongodb://127.0.0.1:30000/'
-# CELERY_MONGODB_BACKEND_SETTINGS = {
-# 	'database': 'MySampleDB',
-# 	'taskmeta_collection': 'my_taskmeta_collection',}
-# CELERY_MONGODB_BACKEND_SETTINGS = {
-#     "host":"127.0.0.1",
-#     "port": 27017,
-#     "database": "cv",
-#     "taskmeta_collection": "cv_collection",
-# }
 
 
 DATABASES = {
@@ -174,6 +150,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+    },
+}
+
+
 
 import django_heroku
 django_heroku.settings(locals())
