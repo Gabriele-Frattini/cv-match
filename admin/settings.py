@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'admin.wsgi.application'
 MONGODB_URL = os.getenv('MONGODB_URI')
 
 #celery
-CELERY_BROKER_URL = [os.environ.get('REDIS_URL', 'redis://localhost:6379')]
+CELERY_BROKER_URL = os.environ['REDIS_URL']
 # CELERY_BROKER_URL = 'mongodb'
 # CELERY_RESULT_BACKEND = "mongodb"
 
@@ -160,8 +160,3 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-
-
-import django_heroku
-django_heroku.settings(locals())
