@@ -1,16 +1,5 @@
-import PyPDF2
 import requests
 from bs4 import BeautifulSoup
-from nltk.stem.porter import *
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from nltk.corpus import wordnet
-from nltk.stem import WordNetLemmatizer
-import io
-import os
-import time
 
 def IndeedScrape(subject):
 
